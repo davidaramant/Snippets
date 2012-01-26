@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleRunner", "ConsoleRunner\ConsoleRunner.csproj", "{D8D684C0-9983-4389-A937-F212787A90A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormRunner", "FormRunner\FormRunner.csproj", "{B58B664D-E5E4-4E4C-8D30-6F982925F77F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8D684C0-9983-4389-A937-F212787A90A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D684C0-9983-4389-A937-F212787A90A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D684C0-9983-4389-A937-F212787A90A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D684C0-9983-4389-A937-F212787A90A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B58B664D-E5E4-4E4C-8D30-6F982925F77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B58B664D-E5E4-4E4C-8D30-6F982925F77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B58B664D-E5E4-4E4C-8D30-6F982925F77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B58B664D-E5E4-4E4C-8D30-6F982925F77F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
