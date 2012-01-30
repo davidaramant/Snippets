@@ -10,7 +10,62 @@ namespace ConsoleRunner
     {
         public static void RunSnippet( string[] args )
         {
+            WL( WorstSubstring(
+                    "This is a long string upsum loreal yeah whatever this is probably good enough",
+                    start: 0,
+                    length: 11 ) );
+        }
 
+        static string WorstSubstring( string input, int start, int length )
+        {
+            var inputArray = input.ToCharArray();
+
+            var inputMatrix = new char[1, inputArray.Length];
+
+            for( int i = 0; i < inputArray.Length; i++ )
+            {
+                inputMatrix[0, i] = inputArray[i];
+            }
+
+            var shorteningMatrix = new char[inputArray.Length, length];
+
+            for( int col = 0; col < length; col++ )
+            {
+                shorteningMatrix[start + col, col] = (char)1;
+            }
+
+            var substringMatrix = Multiply( inputMatrix, shorteningMatrix );
+
+            var substringArray = new char[length];
+            for( int i = 0; i < length; i++ )
+            {
+                substringArray[i] = substringMatrix[0, i];
+            }
+
+            return new String( substringArray );
+        }
+
+        static char[,] Multiply( char[,] a, char[,] b )
+        {
+            if( a.GetLength( 1 ) != b.GetLength( 0 ) )
+            {
+                throw new ArgumentException( "Invalid matrix sizes for multiplcation." );
+            }
+
+            var c = new char[a.GetLength( 0 ), b.GetLength( 1 )];
+
+            for( int i = 0; i < a.GetLength( 0 ); i++ )
+            {
+                for( int j = 0; j < b.GetLength( 1 ); j++ )
+                {
+                    for( int k = 0; k < a.GetLength( 1 ); k++ )
+                    {
+                        c[i, j] += (char)( a[i, k] * b[k, j] );
+                    }
+                }
+            }
+
+            return c;
         }
 
         #region Helper methods
