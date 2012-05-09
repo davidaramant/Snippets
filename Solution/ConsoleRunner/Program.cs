@@ -15,6 +15,11 @@ namespace ConsoleRunner
 
         #region Helper methods
 
+        private static string Desktop
+        {
+            get { return Environment.GetFolderPath( Environment.SpecialFolder.DesktopDirectory ); }
+        }
+
         public static void Main( string[] args )
         {
             try
