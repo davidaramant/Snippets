@@ -90,10 +90,12 @@ namespace ConsoleRunner
                 System.Threading.Thread.CurrentThread.Priority = _previous;
                 if( String.IsNullOrEmpty( _name ) )
                 {
+                    WL( "{0}ms", _watch.ElapsedMilliseconds );
                     WL( _watch.ElapsedMilliseconds );
                 }
                 else
                 {
+                    WL( "{0}: {1}ms", _name, _watch.ElapsedMilliseconds );
                     WL( "{0}: {1}", _name, _watch.ElapsedMilliseconds );
                 }
             }
