@@ -37,6 +37,11 @@ namespace ConsoleRunner
             }
         }
 
+        private static void WL()
+        {
+            Console.WriteLine();
+        }
+
         private static void WL( object text, params object[] args )
         {
             if( text == null )
