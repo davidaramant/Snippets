@@ -1,4 +1,4 @@
-﻿namespace FormRunner
+namespace FormRunner
 {
     partial class FormTester
     {
