@@ -5,6 +5,7 @@
 
 namespace ConsoleRunner
 {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute( "RichEnumGenerator", "1.0.0.0" )]
     public sealed partial class Animal
     {
         private readonly System.String _size;

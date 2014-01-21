@@ -13,6 +13,7 @@
 
 namespace <#= this.Namespace #>
 {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute( "RichEnumGenerator", "1.0.0.0" )]
     public sealed partial class <#= this.ClassName #>
     {
 <# 
