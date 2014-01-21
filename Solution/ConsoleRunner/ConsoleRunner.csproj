@@ -83,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Animal.tt</DependentUpon>
     </Compile>
+    <Compile Include="CsvFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
