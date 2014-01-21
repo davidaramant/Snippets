@@ -9,7 +9,7 @@ using ConsoleRunner;
 namespace Tests
 {
     [TestFixture]
-    public sealed class CsvParserTests
+    public sealed class RowParsingTests
     {
         [Test]
         public void ShouldHandleEmptyRow()

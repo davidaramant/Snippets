@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleRunner
 {
     public sealed class CsvFile
     {
-        private sealed class Entry : IEnumerable<FieldType>
+        public sealed class Entry : IEnumerable<Field>
         {
             public readonly string Name;
-            private readonly IEnumerable<FieldType> _fields;
+            private readonly IEnumerable<Field> _fields;
 
-            public Entry( string name, IEnumerable<FieldType> fields )
+            public Entry( string name, IEnumerable<Field> fields )
             {
                 Name = name;
                 _fields = fields;
             }
 
-            public IEnumerator<FieldType> GetEnumerator()
+            public IEnumerator<Field> GetEnumerator()
             {
                 return _fields.GetEnumerator();
             }
@@ -29,6 +26,21 @@ namespace ConsoleRunner
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
             {
                 return GetEnumerator();
+            }
+        }
+
+        public sealed class Field
+        {
+            private readonly FieldType _fieldType;
+            public readonly string Value;
+
+            public string Name { get { return _fieldType.Name; } }
+            public Type Type { get { return _fieldType.Type; } }
+
+            public Field( FieldType fieldType, string value )
+            {
+                _fieldType = fieldType;
+                Value = value;
             }
         }
 
@@ -44,6 +56,34 @@ namespace ConsoleRunner
             }
         }
 
+        private readonly string[] _names;
+        private readonly Type[] _types;
+        private readonly List<string[]> _rows;
+
+        public CsvFile( string[] names, Type[] types, List<string[]> rows )
+        {
+            _names = names;
+            _types = types;
+            _rows = rows;
+        }
+
+        public IEnumerable<Entry> GetEntries()
+        {
+            var fieldTypes = _names.Skip( 1 ).Zip(
+                _types,
+                ( name, type ) => new FieldType( name, type ) ).ToArray();
+
+            return 
+                _rows.Select( 
+                    row => new Entry(
+                        row.First(),
+                        fieldTypes.Zip( 
+                            row.Skip( 1 ), 
+                            ( fieldType, colValue ) => new Field( fieldType, colValue ) ) ) );
+        }
+
+        #region Parsing CSV file
+
         private enum Stage
         {
             Names,
@@ -51,34 +91,40 @@ namespace ConsoleRunner
             Rows,
         }
 
-        public static CsvFile ParseFile( string fileName )
+        public static CsvFile ParseFile( IEnumerable<string> lines  )
         {
             var currentStage = Stage.Names;
 
-            int cols = 0;
-            IEnumerable<string> names = null;
-            IEnumerable<Type> types = null;
-            List<IEnumerable<string>> rows = new List<IEnumerable<string>>();
+            int numFields = 0;
+            string[] names = null;
+            Type[] types = null;
+            List<string[]> rows = new List<string[]>();
 
-            foreach( var line in File.ReadLines( fileName ) )
+            foreach( var line in lines )
             {
                 switch( currentStage )
                 {
                     case Stage.Names:
-                        names = ParseRow( line );
-                        cols = names.Count();
+                        names = ParseRow( line ).Skip( 1 ).ToArray();
+                        numFields = names.Length;
                         currentStage = Stage.Types;
                         break;
 
                     case Stage.Types:
-                        types = ParseRow( line ).Select( Type.GetType ).ToArray();
-                        // TODO: Check width
+                        types = ParseRow( line ).Skip( 1 ).Select( Type.GetType ).ToArray();
+                        if( types.Length != numFields )
+                        {
+                            throw new ArgumentException( "Bad number of types." );
+                        }
                         currentStage = Stage.Rows;
                         break;
 
                     case Stage.Rows:
-                        var newRow = ParseRow( line );
-                        // TODO: Check width
+                        var newRow = ParseRow( line ).ToArray();
+                        if( newRow.Length != numFields + 1 ) // These rows include the name as well
+                        {
+                            throw new ArgumentException( "Bad number of columns in data row." );
+                        }
                         rows.Add( newRow );
                         break;
 
@@ -90,10 +136,9 @@ namespace ConsoleRunner
             return new CsvFile( names, types, rows );
         }
 
-        public CsvFile( IEnumerable<string> names, IEnumerable<Type> types, List<IEnumerable<string>> rows )
-        {
+        #endregion
 
-        }
+        #region Parsing CSV row
 
         private enum RowState
         {
@@ -183,5 +228,7 @@ namespace ConsoleRunner
                 yield return currentColumn.ToString();
             }
         }
+
+        #endregion
     }
 }
