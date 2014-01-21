@@ -31,54 +31,64 @@ namespace ConsoleRunner
 
         public sealed class Field
         {
-            private readonly FieldType _fieldType;
+            public readonly FieldType Metadata;
             public readonly string Value;
 
-            public string Name { get { return _fieldType.Name; } }
-            public Type Type { get { return _fieldType.Type; } }
-
-            public Field( FieldType fieldType, string value )
+            public Field( FieldType metadata, string value )
             {
-                _fieldType = fieldType;
+                Metadata = metadata;
                 Value = value;
             }
         }
 
         public sealed class FieldType
         {
-            public readonly string Name;
+            public readonly string RawName;
             public readonly Type Type;
 
-            public FieldType( string name, Type type )
+            public string FieldName
             {
-                Name = name;
+                get { return "_" + ArgumentName; }
+            }
+
+            public string ArgumentName
+            {
+                get { return Char.ToLowerInvariant( RawName[0] ) + RawName.Substring( 1 ); }
+            }
+
+            public string PropertyName
+            {
+                get { return Char.ToUpperInvariant( RawName[0] ) + RawName.Substring( 1 ); }
+            }
+
+            public FieldType( string rawName, Type type )
+            {
+                RawName = rawName;
                 Type = type;
             }
         }
 
-        private readonly string[] _names;
-        private readonly Type[] _types;
         private readonly List<string[]> _rows;
+
+        public readonly IEnumerable<FieldType> FieldTypes;
 
         public CsvFile( string[] names, Type[] types, List<string[]> rows )
         {
-            _names = names;
-            _types = types;
             _rows = rows;
+
+            FieldTypes = names.Zip(
+                types,
+                ( name, type ) => new FieldType( name, type ) ).ToArray();
         }
 
         public IEnumerable<Entry> GetEntries()
         {
-            var fieldTypes = _names.Skip( 1 ).Zip(
-                _types,
-                ( name, type ) => new FieldType( name, type ) ).ToArray();
-
-            return 
-                _rows.Select( 
+            return
+                _rows.Select(
                     row => new Entry(
                         row.First(),
-                        fieldTypes.Zip( 
-                            row.Skip( 1 ), 
+                        FieldTypes.Zip(
+                            row.Skip( 1 ),
                             ( fieldType, colValue ) => new Field( fieldType, colValue ) ) ) );
         }
 
@@ -91,7 +101,7 @@ namespace ConsoleRunner
             Rows,
         }
 
-        public static CsvFile ParseFile( IEnumerable<string> lines  )
+        public static CsvFile ParseFile( IEnumerable<string> lines )
         {
             var currentStage = Stage.Names;
 

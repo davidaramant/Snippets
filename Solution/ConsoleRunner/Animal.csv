@@ -1,5 +1,5 @@
-﻿"Name","Size"
-,"System.String"
-"Dog","Small"
-"Cat","Small"
-"Horse","Large"
+Name,Size,Number
+Animal,System.String,System.Int32
+Dog,"""Small""",0
+Cat,"""Small""",1
+Horse,"""Large""",2
