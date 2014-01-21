@@ -5,31 +5,38 @@
 
 namespace ConsoleRunner
 {
-	public sealed partial class Animal
-	{
-		private readonly System.String _size;
-		private readonly System.Int32 _number;
+    public sealed partial class Animal
+    {
+        private readonly System.String _size;
+        private readonly System.Int32 _number;
 
-		public static readonly Animal Dog = new Animal(
-				size: "Small", 	
-				number: 0	
-		);
-		public static readonly Animal Cat = new Animal(
-				size: "Small", 	
-				number: 1	
-		);
-		public static readonly Animal Horse = new Animal(
-				size: "Large", 	
-				number: 2	
-		);
+        public static readonly Animal Dog = new Animal(
+            size: "Small", 	
+            number: 0	
+        );
+        public static readonly Animal Cat = new Animal(
+            size: "Small", 	
+            number: 1	
+        );
+        public static readonly Animal Horse = new Animal(
+            size: "Large", 	
+            number: 2	
+        );
 
-		private Animal(
-			System.String size, 	
-			System.Int32 number	
-		)
+        private Animal(
+            System.String size, 	
+            System.Int32 number	
+        )
+        {
+            _size = size;	
+            _number = number;	
+        }
+
+		public static System.Collections.Generic.IEnumerable<Animal> GetValues()
 		{
-			_size = size;	
-			_number = number;	
+			yield return Dog;
+			yield return Cat;
+			yield return Horse;
 		}
-	}
+    }
 }

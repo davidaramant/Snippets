@@ -13,15 +13,15 @@
 
 namespace <#= this.Namespace #>
 {
-	public sealed partial class <#= this.ClassName #>
-	{
+    public sealed partial class <#= this.ClassName #>
+    {
 <# 
 var fileContents = ParseFile();
 
 foreach( var fieldType in fileContents.FieldTypes )
 { 
 #>
-		private readonly <#= fieldType.Type.FullName #> <#= fieldType.FieldName #>;
+        private readonly <#= fieldType.Type.FullName #> <#= fieldType.FieldName #>;
 <# 
 }
 
@@ -33,43 +33,55 @@ foreach( var fieldType in fileContents.FieldTypes )
 foreach( var entry in fileContents.GetEntries() )
 { 
 #>
-		public static readonly <#= this.ClassName #> <#= entry.Name #> = new <#= this.ClassName #>(
-	<#
-	for( int i = 0; i < entry.Count(); i++ )
-	{
-		var field = entry.ElementAt( i );
-	#>
-			<#= field.Metadata.ArgumentName #>: <#= field.Value #><# if( i < entry.Count() - 1 ) { #>, <# } #>	
-	<#
-	}
-	#>
-	);
+        public static readonly <#= this.ClassName #> <#= entry.Name #> = new <#= this.ClassName #>(
+    <#
+    for( int i = 0; i < entry.Count(); i++ )
+    {
+        var field = entry.ElementAt( i );
+    #>
+        <#= field.Metadata.ArgumentName #>: <#= field.Value #><# if( i < entry.Count() - 1 ) { #>, <# } #>	
+    <#
+    }
+    #>
+    );
 <# 
 } 
 #>
 
-		private <#= this.ClassName #>(
+        private <#= this.ClassName #>(
 <#
-	for( int i  = 0; i < fileContents.FieldTypes.Count(); i++  )
-	{
-		var fieldType = fileContents.FieldTypes.ElementAt( i );
+    for( int i  = 0; i < fileContents.FieldTypes.Count(); i++  )
+    {
+        var fieldType = fileContents.FieldTypes.ElementAt( i );
 #>
-			<#= fieldType.Type.FullName #> <#= fieldType.ArgumentName #><# if( i < fileContents.FieldTypes.Count() - 1 ) { #>, <# } #>	
+            <#= fieldType.Type.FullName #> <#= fieldType.ArgumentName #><# if( i < fileContents.FieldTypes.Count() - 1 ) { #>, <# } #>	
 <#
-	}
+    }
 #>
-		)
+        )
+        {
+<#
+    foreach( var fieldType in fileContents.FieldTypes )
+    {
+#>
+            <#= fieldType.FieldName #> = <#= fieldType.ArgumentName #>;	
+<#
+    }
+#>
+        }
+
+		public static System.Collections.Generic.IEnumerable<<#= this.ClassName #>> GetValues()
 		{
 <#
-	foreach( var fieldType in fileContents.FieldTypes )
-	{
+foreach( var entry in fileContents.GetEntries() )
+{
 #>
-			<#= fieldType.FieldName #> = <#= fieldType.ArgumentName #>;	
-<#
-	}
+			yield return <#= entry.Name #>;
+<# 
+} 
 #>
 		}
-	}
+    }
 }
 <#+
 string Namespace = "Namespace";
@@ -78,7 +90,7 @@ string CsvFileName = "CsvFile.csv";
 
 private CsvFile ParseFile()
 {
-	return CsvFile.ParseFile( File.ReadLines( this.Host.ResolvePath(CsvFileName) ) );
+    return CsvFile.ParseFile( File.ReadLines( this.Host.ResolvePath(CsvFileName) ) );
 }
 
 
@@ -318,5 +330,5 @@ private CsvFile ParseFile()
 
         #endregion
     }
-	
+    
 #>
