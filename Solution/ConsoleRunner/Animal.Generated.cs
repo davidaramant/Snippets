@@ -33,6 +33,9 @@ namespace ConsoleRunner
             _number = number;	
         }
 
+		/// <summary>
+		/// Returns all the enumeration values.
+		/// </summary>
 		public static System.Collections.Generic.IEnumerable<Animal> GetValues()
 		{
 			yield return Dog;

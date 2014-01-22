@@ -1,6 +1,6 @@
 ﻿<# 
 	this.Namespace = "ConsoleRunner";
 	this.ClassName = "Animal"; 
-	this.CsvFileName = "Animal.csv";
+	this.CsvFilePath = "Animal.csv";
 #>
 <#@ include file="EnumGenerator.tt" #>

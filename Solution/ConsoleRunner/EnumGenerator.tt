@@ -71,6 +71,9 @@ foreach( var entry in fileContents.GetEntries() )
 #>
         }
 
+		/// <summary>
+		/// Returns all the enumeration values.
+		/// </summary>
 		public static System.Collections.Generic.IEnumerable<<#= this.ClassName #>> GetValues()
 		{
 <#
@@ -85,13 +88,16 @@ foreach( var entry in fileContents.GetEntries() )
     }
 }
 <#+
+
+// Inputs into template
+
 string Namespace = "Namespace";
 string ClassName = "MyClass";
-string CsvFileName = "CsvFile.csv";
+string CsvFilePath = "CsvFile.csv";
 
 private CsvFile ParseFile()
 {
-    return CsvFile.ParseFile( File.ReadLines( this.Host.ResolvePath(CsvFileName) ) );
+    return CsvFile.ParseFile( File.ReadLines( this.Host.ResolvePath(CsvFilePath) ) );
 }
 
 
