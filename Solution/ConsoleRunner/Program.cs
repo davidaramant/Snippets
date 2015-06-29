@@ -64,45 +64,41 @@ namespace ConsoleRunner
             System.Diagnostics.Debugger.Break();
         }
 
-        class Timed : IDisposable
+        sealed class Timed : IDisposable
         {
             readonly System.Diagnostics.Stopwatch _watch;
             readonly string _name = String.Empty;
             readonly System.Threading.ThreadPriority _previous;
 
-
-            private Timed( string name )
+            private Timed(string name)
             {
+                GC.Collect(2);
+                GC.WaitForPendingFinalizers();
                 _name = name;
                 _previous = System.Threading.Thread.CurrentThread.Priority;
                 System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
                 _watch = System.Diagnostics.Stopwatch.StartNew();
             }
 
-            public static IDisposable Run()
+            public static IDisposable Run(string name = "")
             {
-                return Run( String.Empty );
-            }
-
-            public static IDisposable Run( string name )
-            {
-                return new Timed( name );
+                return new Timed(name);
             }
 
             public void Dispose()
             {
                 _watch.Stop();
                 System.Threading.Thread.CurrentThread.Priority = _previous;
-                if( String.IsNullOrEmpty( _name ) )
+                if (String.IsNullOrEmpty(_name))
                 {
-                    WL( "{0}ms", _watch.ElapsedMilliseconds );
-                    WL( _watch.ElapsedMilliseconds );
+                    WL("{0}ms", _watch.ElapsedMilliseconds);
                 }
                 else
                 {
-                    WL( "{0}: {1}ms", _name, _watch.ElapsedMilliseconds );
-                    WL( "{0}: {1}", _name, _watch.ElapsedMilliseconds );
+                    WL("{0}: {1}ms", _name, _watch.ElapsedMilliseconds);
                 }
+                GC.Collect(2);
+                GC.WaitForPendingFinalizers();
             }
         }
 
