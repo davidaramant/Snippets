@@ -20,7 +20,7 @@ namespace ConsoleRunner
 
             const int trials = 5 * 1000 * 1000;
 
-            WL( $"Vector<double>.Count: {Vector<double>.Count}" );
+            WL($"Vector<double>.Count: {Vector<double>.Count}");
             WL();
 
             using (Timed.Run("Raw Doubles"))
@@ -122,7 +122,7 @@ namespace ConsoleRunner
                 WL(z);
             }
 
-            using (Timed.Run("ComplexVector - Different math"))
+            using (Timed.Run("Vector<double>"))
             {
                 var cr = new Vector<double>(new[] { cr1, cr2 });
                 var ci = new Vector<double>(new[] { ci1, ci2 });
@@ -141,7 +141,28 @@ namespace ConsoleRunner
                 }
 
                 WL($"({zr}, {zi}i)");
-            }            
+            }
+
+            using (Timed.Run("Vector<double> - Using Vector methods for operations"))
+            {
+                var cr = new Vector<double>(new[] { cr1, cr2 });
+                var ci = new Vector<double>(new[] { ci1, ci2 });
+
+                var zr = new Vector<double>();
+                var zi = new Vector<double>();
+
+                for (int i = 0; i < trials; i++)
+                {
+                    var zr2 = Vector.Multiply(zr, zr);
+                    var zi2 = Vector.Multiply(zi, zi);
+
+                    var tempZr = Vector.Add(Vector.Subtract(zr2, zi2), cr);
+                    zi = Vector.Add(Vector.Multiply(2,Vector.Multiply(zr,zi)),ci);
+                    zr = tempZr;
+                }
+
+                WL($"({zr}, {zi}i)");
+            }
         }
 
         #region Helper methods
