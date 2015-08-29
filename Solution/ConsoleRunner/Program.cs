@@ -20,6 +20,9 @@ namespace ConsoleRunner
 
             const int trials = 5 * 1000 * 1000;
 
+            WL( $"Vector<double>.Count: {Vector<double>.Count}" );
+            WL();
+
             using (Timed.Run("Raw Doubles"))
             {
                 double zr1 = 0;
